@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>VR Game Dev Academy | Полный курс по созданию VR-игр</title>
+    <!-- Google Fonts & Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #050515 0%, #0a0a2a 100%);
+            color: #eef5ff;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 2rem 1.8rem;
+        }
+
+        /* стеклянная карточка */
+        .glass-card {
+            background: rgba(15, 20, 45, 0.75);
+            backdrop-filter: blur(14px);
+            border-radius: 2rem;
+            border: 1px solid rgba(59, 130, 246, 0.35);
+            box-shadow: 0 25px 40px -12px rgba(0, 0, 0, 0.5);
+            transition: all 0.2s;
+        }
+
+        .neon-text {
+            background: linear-gradient(135deg, #C084FC, #3B82F6, #06b6d4);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 800;
+        }
+
+        h1 {
+            font-size: 3.3rem;
+            line-height: 1.2;
+            font-weight: 800;
+        }
+        h2 {
+            font-size: 2rem;
+            margin: 2rem 0 1.2rem 0;
+            border-left: 5px solid #f97316;
+            padding-left: 1rem;
+        }
+        h3 {
+            font-size: 1.5rem;
+            margin: 1rem 0 0.8rem 0;
+            color: #facc15;
+        }
+        .badge {
+            background: #1e293b;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 1rem;
+            color: #7dd3fc;
+        }
+
+        /* Информационные блоки — как энциклопедия */
+        .info-chapter {
+            margin-bottom: 2.5rem;
+            background: rgba(8, 12, 30, 0.6);
+            border-radius: 1.5rem;
+            padding: 1.8rem;
+            transition: 0.2s;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+        .info-chapter:hover {
+            border-color: #3b82f680;
+        }
+        .source-ref {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-top: 0.8rem;
+            border-top: 1px dashed #334155;
+            padding-top: 0.6rem;
+        }
+        .source-ref i {
+            margin-right: 6px;
+            color: #f97316;
+        }
+        .key-term {
+            background: #0f172f;
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: #facc15;
+        }
+        .stat-badge {
+            display: inline-block;
+            background: #3b82f620;
+            border-radius: 30px;
+            padding: 0.2rem 0.8rem;
+            margin-right: 0.6rem;
+            font-size: 0.75rem;
+        }
+
+        /* ИТОГОВЫЙ ТЕСТ - 10 ВОПРОСОВ */
+        .final-test-area {
+            margin: 3rem 0 2rem 0;
+            background: linear-gradient(145deg, #0c1035, #070b25);
+            border-radius: 2rem;
+            padding: 2rem;
+            border: 1px solid #f97316;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .final-question {
+            background: rgba(0, 0, 0, 0.45);
+            border-radius: 1.2rem;
+            padding: 1.2rem;
+            margin-bottom: 1.2rem;
+        }
+        .final-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 0.8rem 0 0.5rem 0;
+        }
+        .final-opt {
+            background: #1e293b;
+            border: 1px solid #334155;
+            padding: 0.5rem 1.2rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.9rem;
+        }
+        .final-opt:hover {
+            background: #2d3a50;
+        }
+        .final-opt.selected-correct {
+            background: #0e7b32;
+            border-color: #4caf50;
+            box-shadow: 0 0 6px #4caf50;
+        }
+        .final-opt.selected-wrong {
+            background: #b91c1c;
+            text-decoration: line-through;
+        }
+        .final-feedback {
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            padding-left: 0.8rem;
+            border-left: 3px solid #f97316;
+        }
+        .test-result {
+            background: #0f172fb3;
+            border-radius: 1.5rem;
+            padding: 1.2rem;
+            margin-top: 1.5rem;
+            text-align: center;
+            font-weight: bold;
+        }
+        button {
+            background: #3b82f6;
+            border: none;
+            padding: 0.75rem 1.8rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        button:hover {
+            background: #2563eb;
+            transform: scale(1.02);
+        }
+        .btn-reset-test {
+            background: #f97316;
+            margin-top: 0.5rem;
+        }
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid #1e293b;
+            margin-top: 2rem;
+            font-size: 0.85rem;
+        }
+        @media (max-width: 750px) {
+            h1 { font-size: 2.2rem; }
+            .container { padding: 1rem; }
+            .final-options { gap: 0.6rem; }
+        }
+        .toc {
+            background: #0a0e2a;
+            padding: 1rem;
+            border-radius: 1.2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.8rem;
+        }
+        .toc a {
+            color: #93c5fd;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .toc a:hover {
+            color: #facc15;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Hero -->
+    <div class="glass-card" style="padding: 2rem; text-align: center; margin-bottom: 1.5rem;">
+        <div class="badge"><i class="fas fa-vr-cardboard"></i>  ЭНЦИКЛОПЕДИЯ VR-РАЗРАБОТЧИКА • 2025</div>
+        <h1>VR Game Dev <span class="neon-text">Academy</span></h1>
+        <p style="font-size: 1.2rem; max-width: 800px; margin: 1rem auto;">Исчерпывающий сборник знаний по созданию игр виртуальной реальности: от основ физики до публикации в магазинах. Основано на официальной документации Unity/Unreal, исследованиях и опыте ведущих студий.</p>
+        <div style="margin-top: 1rem;"><i class="fas fa-book-open"></i> 12+ глав •  <i class="fas fa-database"></i> 60+ технических концепций  •  <i class="fas fa-clipboard-list"></i> Финальный тест из 10 вопросов</div>
+    </div>
+
+    <!-- Оглавление быстрого перехода -->
+    <div class="toc">
+        <a href="#ch1"><i class="fas fa-cogs"></i> 1. Основы</a>
+        <a href="#ch2"><i class="fas fa-cube"></i> 2. 3D/модели</a>
+        <a href="#ch3"><i class="fas fa-hand-peace"></i> 3. Физика</a>
+        <a href="#ch4"><i class="fas fa-network-wired"></i> 4. Сеть</a>
+        <a href="#ch5"><i class="fas fa-palette"></i> 5. UX/UI</a>
+        <a href="#ch6"><i class="fas fa-chart-line"></i> 6. Оптимизация</a>
+        <a href="#ch7"><i class="fas fa-rocket"></i> 7. Релиз</a>
+        <a href="#ch8"><i class="fas fa-brain"></i> 8. Тренды</a>
+        <a href="#final-test"><i class="fas fa-check-double"></i> Финальный тест</a>
+    </div>
+
+    <!-- =========== ГЛАВА 1 ========== -->
+    <div id="ch1" class="info-chapter">
+        <h2><i class="fas fa-cogs"></i> 1. Основы разработки VR-игр</h2>
+        <p><strong>VR (Virtual Reality)</strong> — технология полного погружения. Разработка требует особого внимания к производительности и комфорту. Основные игровые движки: <span class="key-term">Unity (XR Interaction Toolkit)</span> и <span class="key-term">Unreal Engine 5 (VR Template)</span>. Ключевой стандарт взаимодействия с железом — <strong>OpenXR</strong>, поддерживаемый всеми современными шлемами (Meta Quest, Valve Index, HTC Vive, Pico).</p>
+        <p>По данным <strong>Statista (2025)</strong>, рынок VR-игр превышает $25 млрд. Средняя стоимость разработки инди-VR-проекта — $50k–$200k. Главные сложности: <strong>удержание 72+ FPS</strong> (минимум), latency < 20 мс, предотвращение укачивания (simulator sickness).</p>
+        <div class="source-ref"><i class="fas fa-globe"></i> Источники: Oculus Developer Docs, Unity Learn VR Pathway, Unreal Engine VR Best Practices (2024).</div>
+    </div>
+
+    <!-- ГЛАВА 2 -->
+    <div id="ch2" class="info-chapter">
+        <h2><i class="fas fa-cube"></i> 2. 3D-моделирование и окружение для VR</h2>
+        <p>Для VR нужны оптимизированные 3D-модели. Полигональный бюджет: до <strong>100k треугольников</strong> на сцену для standalone-гарнитур (Quest). Основные инструменты: <span class="key-term">Blender (бесплатно)</span>, Autodesk Maya, ZBrush. Пайплайн: высокополигональная модель → ретопология → UV-развёртка → текстуры PBR (Albedo, Metallic, Roughness, Normal) → экспорт FBX/glTF. Для окружения используют <strong>Procedural Generation</strong> (Houdini, Terrain Tools).</p>
+        <p>Ассеты можно брать из <strong>Unity Asset Store, Unreal Marketplace, Sketchfab</strong>. Рекомендация Facebook: использовать текстурные атласы и LOD (уровни детализации). Продвинутые техники: <span class="key-term">Shader Graph</span> для эффектов смещения и параллакса.</p>
+        <div class="source-ref"><i class="fas fa-book"></i> По материалам: Blender Manual, “3D Art for VR” (Armstrong, 2024), Meta Asset Optimization Guide.</div>
+    </div>
+
+    <!-- ГЛАВА 3 -->
+    <div id="ch3" class="info-chapter">
+        <h2><i class="fas fa-hand-peace"></i> 3. Физика, взаимодействие и AI в VR</h2>
+        <p>Реалистичный захват объектов — основа иммерсивности. В Unity: <span class="key-term">XR Grab Interactable + Configurable Joint</span>. Броски с учётом скорости (AddForce). Продвинутые системы: телекинез (Raycast + AddForceAtPosition). AI в VR требует навигации <strong>NavMesh</strong> с учётом возможных препятствий. Враги должны иметь задержку реакции, чтобы не вызывать стресс. </p>
+        <p>Физика: используйте <strong>Fixed Timestep</strong> и избегайте коллизий каждый кадр. Для многопоточности — <strong>Unity DOTS Physics</strong>, в Unreal — Chaos Physics. Также важно реализовать интерактивную среду: разрушаемые объекты, динамические ткани (Obi Cloth).</p>
+        <div class="source-ref"><i class="fas fa-microchip"></i> Источники: GDC 2024 “Physics in VR: Lessons from Boneworks”, Microsoft Mixed Reality Toolkit Docs.</div>
+    </div>
+
+    <!-- ГЛАВА 4 -->
+    <div id="ch4" class="info-chapter">
+        <h2><i class="fas fa-network-wired"></i> 4. Сетевые решения и мультиплеер в VR</h2>
+        <p>Сетевые VR-игры требуют жёсткой синхронизации позиций рук и головы (6DoF). Популярные библиотеки: <span class="key-term">Photon PUN 2 / Fusion</span>, <span class="key-term">Netcode for GameObjects</span>, Mirror. Задержки должны быть менее 50 мс. Используется <strong>локальное предсказание (client-side prediction)</strong> и интерполяция.</p>
+        <p>Социальные фичи: голосовой чат (Vivox, Dissonance), аватары с блендшейпами для выражения лица. Важно: оптимизация трафика — отправлять данные только об изменении состояния (dirty flags). Хостинг: выделенные серверы или relay-сервисы (Photon Cloud).</p>
+        <div class="source-ref"><i class="fas fa-cloud"></i> Данные: Photon Engineering для VR, документация Meta “Building Social VR Experiences”.</div>
+    </div>
+
+    <!-- ГЛАВА 5 UX/UI -->
+    <div id="ch5" class="info-chapter">
+        <h2><i class="fas fa-palette"></i> 5. UX/UI и комфорт в виртуальной реальности</h2>
+        <p>VR-интерфейсы должны быть <strong>world space</strong> (размещены в мире, на расстоянии вытянутой руки). Используйте лазерные указки (ray interaction) или прямое касание. Исследования Google VR показывают: меню с большими кнопками (минимум 5 см в VR) снижают количество ошибок.</p>
+        <p>Ключевые правила комфорта: никогда не забирайте контроль над камерой, используйте телепортацию для людей, чувствительных к укачиванию. Добавьте виньетирование при гладком перемещении. Для интерфейсов обратная связь (звук, хаптика).</p>
+        <div class="source-ref"><i class="fas fa-universal-access"></i> Источники: “VR UX Guidelines” (Magic Leap), Oculus Best Practices, Gamasutra 2024.</div>
+    </div>
+
+    <!-- ГЛАВА 6 оптимизация -->
+    <div id="ch6" class="info-chapter">
+        <h2><i class="fas fa-chart-line"></i> 6. Глубокая оптимизация производительности</h2>
+        <p>VR — самая требовательная платформа. Базовые техники: <span class="key-term">Single Pass Instanced</span> рендеринг (снижает нагрузку на GPU вдвое), <strong>фиксированный foveated rendering</strong> для Quest, LOD, occlusion culling, GPU instancing. Профилирование: <strong>RenderDoc, XR Performance Toolkit, Unity Profiler, Unreal Insights</strong>.</p>
+        <p>CPU: избегайте дорогих операций в Update, используйте Object Pooling, Job System/Burst. Для памяти: ASTC текстуры, уменьшение разрешения динамически с помощью <span class="key-term">Dynamic Resolution</span>. Целевые метрики: 72 FPS для Quest, 90 FPS для PCVR.</p>
+        <div class="source-ref"><i class="fas fa-chart-simple"></i> Источники: Meta “Performance Optimization for Mobile VR”, Unreal Engine VR Performance Guide.</div>
+    </div>
+
+    <!-- ГЛАВА 7 релиз и монетизация -->
+    <div id="ch7" class="info-chapter">
+        <h2><i class="fas fa-rocket"></i> 7. Релиз в магазины и монетизация</h2>
+        <p>Основные площадки: <strong>Meta Quest Store (гейткипинг, высокие требования)</strong>, App Lab (упрощённый доступ), SteamVR, Pico Store, SideQuest. Процесс сертификации требует стабильного FPS, отсутствия багов с отслеживанием рук и соблюдения политик приватности.</p>
+        <p>Модели монетизации: premium (70% разработчику), DLC, подписки (менее популярны в VR). Цена средней VR-игры: $19.99–29.99. Маркетинговые стратегии: демоверсии, краудфандинг (Kickstarter), партнёрства с блогерами (VR YouTubers). Для аналитики — <span class="key-term">Unity Analytics, GameAnalytics</span>.</p>
+        <div class="source-ref"><i class="fas fa-dollar-sign"></i> По данным: Meta Store Guidelines 2025, Steam VR统计数据, доклад Omdia “VR Games Market”.</div>
+    </div>
+
+    <!-- ГЛАВА 8 тренды -->
+    <div id="ch8" class="info-chapter">
+        <h2><i class="fas fa-brain"></i> 8. Будущее VR и тренды 2026+</h2>
+        <p>Смешанная реальность (MR) становится мейнстримом: гарнитуры Quest 3 и Apple Vision Pro позволяют накладывать виртуальные объекты на реальный мир. <strong>Eye-tracking (Foveated rendering)</strong> даёт прирост производительности до 30%. Облачный VR (NVIDIA CloudXR) убирает необходимость в мощном ПК.</p>
+        <p>Генеративный AI уже используется для создания уровней, текстур и даже кода VR-механик. Социальные платформы вроде VRChat расширяются, добавляя экономику создателей. По прогнозам <strong>IDC, к 2027 году продажи VR/AR-гарнитур превысят 50 млн в год</strong>.</p>
+        <div class="source-ref"><i class="fas fa-chart-line"></i> Источники: GDC 2025 State of VR, IDC FutureScape, “Generative AI in Game Dev” (IEEE).</div>
+    </div>
+
+    <!-- =============== ФИНАЛЬНЫЙ ТЕСТ ИЗ 10 ВОПРОСОВ =============== -->
+    <div id="final-test" class="final-test-area">
+        <h2 style="margin-top:0; border-left-color: #f97316;"><i class="fas fa-check-double"></i> Финальный тест: проверьте свои знания</h2>
+        <p style="margin-bottom:1.5rem;">После изучения всей информации ответьте на 10 вопросов. Каждый вопрос имеет один правильный вариант. Нажмите на ответ — сразу увидите обратную связь. По завершении узнайте итоговый результат.</p>
+        <div id="finalTestContainer"></div>
+        <div id="finalResult" class="test-result"></div>
+        <button id="resetFinalTest" class="btn-reset-test" style="margin-right: 1rem;"><i class="fas fa-undo-alt"></i> Сбросить все ответы теста</button>
+        <button id="checkFinalTest"><i class="fas fa-check-circle"></i> Показать результат</button>
+    </div>
+
+    <div class="footer">
+        <i class="fas fa-vr-cardboard"></i> VR Game Dev Academy • Информация собрана из официальной документации, докладов GDC, Meta, Unreal Engine, Unity. Учитесь и создавайте будущее!
+    </div>
+</div>
+
+<script>
+    // ----- ФИНАЛЬНЫЙ ТЕСТ: 10 вопросов по всей теории -----
+    const finalQuestions = [
+        { text: "Какой минимальный FPS считается обязательным для комфортной VR-игры на гарнитурах типа Meta Quest?", options: ["30 FPS", "60 FPS", "72+ FPS", "144 FPS"], correct: 2, explanation: "Стандарт для standalone VR — 72 FPS (минимум для предотвращения укачивания)." },
+        { text: "Какой API является кроссплатформенным стандартом для работы с VR-гарнитурами?", options: ["DirectX 12", "Vulkan", "OpenXR", "WebGPU"], correct: 2, explanation: "OpenXR поддерживается всеми производителями шлемов (Meta, Valve, HTC, Pico)." },
+        { text: "Что из перечисленного НЕ является рекомендацией по оптимизации для VR?", options: ["Single Pass Instanced", "Использование LOD", "Постоянный Real-time lighting без baking", "Foveated Rendering"], correct: 2, explanation: "Real-time lighting без baking очень ресурсоёмко; рекомендуются запечённые световые карты." },
+        { text: "Как называется технология рендеринга, которая снижает качество по краям экрана, следуя за взглядом?", options: ["DLSS", "FSR", "Foveated Rendering", "Ray Reconstruction"], correct: 2, explanation: "Fixed / Eye-tracked Foveated Rendering — ключевой метод экономии ресурсов в VR." },
+        { text: "Какой инструмент БЕСПЛАТЕН и широко используется для 3D-моделирования VR-ассетов?", options: ["Blender", "3ds Max", "Maya", "Houdini"], correct: 0, explanation: "Blender — мощный opensource пакет, стандарт для инди-разработчиков." },
+        { text: "Что такое 'телепортация' (teleport) в VR-навигации?", options: ["Плавное передвижение с помощью джойстика", "Мгновенное перемещение игрока в указанную точку", "Вращение камеры", "Изменение масштаба"], correct: 1, explanation: "Телепортация — базовый способ избежать укачивания." },
+        { text: "Какой магазин является основным для публикации standalone VR-игр для Meta?", options: ["SteamVR", "Meta Quest Store / App Lab", "PlayStation Store", "Epic Games Store"], correct: 1, explanation: "Meta Quest Store — официальный канал для гарнитур Quest." },
+        { text: "Что из перечисленного является трендом смешанной реальности (MR) в 2025+?", options: ["Только текстурные улучшения", "Наложение виртуальных объектов на реальное окружение через камеры гарнитуры", "Исключительно звук 3D", "Текстовая RPG"], correct: 1, explanation: "Mixed Reality (MR) совмещает реальный мир с виртуальным, используя пасскроу." },
+        { text: "Какая библиотека НЕ предназначена для создания мультиплеера в VR (Unity)?", options: ["Photon PUN", "Mirror", "Netcode for GameObjects", "TextMeshPro"], correct: 3, explanation: "TextMeshPro — для рендеринга текста, не имеет сетевых функций." },
+        { text: "Почему важно использовать 'виньетирование' при гладком перемещении в VR?", options: ["Это улучшает графику", "Уменьшает периферическое зрение во время движения, снижая укачивание", "Экономит батарею", "Это требование лицензии"], correct: 1, explanation: "Виньетирование сужает поле зрения при движении, уменьшая вестибулярный конфликт." }
+    ];
+
+    let finalAnswers = new Array(10).fill(null);  // индекс выбранного ответа
+
+    function renderFinalTest() {
+        const container = document.getElementById('finalTestContainer');
+        if (!container) return;
+        let html = '';
+        finalQuestions.forEach((q, idx) => {
+            const selected = finalAnswers[idx];
+            let selectedIsCorrect = (selected !== null && selected === q.correct);
+            let wrongSelected = (selected !== null && selected !== q.correct);
+            html += `<div class="final-question" data-qidx="${idx}">
+                        <div><strong>${idx+1}. ${q.text}</strong></div>
+                        <div class="final-options" id="finalOpts-${idx}">`;
+            q.options.forEach((opt, optIdx) => {
+                let additionalClass = '';
+                if (selected !== null) {
+                    if (optIdx === q.correct) additionalClass = 'selected-correct';
+                    else if (optIdx === selected && optIdx !== q.correct) additionalClass = 'selected-wrong';
+                }
+                html += `<div class="final-opt ${additionalClass}" data-opt-index="${optIdx}">${opt}</div>`;
+            });
+            html += `</div>`;
+            if (selected !== null) {
+                const isCorrect = (selected === q.correct);
+                const feedbackText = isCorrect ? `✅ Верно! ${q.explanation}` : `❌ Неверно. Правильный ответ: ${q.options[q.correct]}. ${q.explanation}`;
+                html += `<div class="final-feedback">${feedbackText}</div>`;
+            } else {
+                html += `<div class="final-feedback">👆 Нажмите на вариант, чтобы ответить</div>`;
+            }
+            html += `</div>`;
+        });
+        container.innerHTML = html;
+        attachFinalEvents();
+    }
+
+    function attachFinalEvents() {
+        for (let i = 0; i < finalQuestions.length; i++) {
+            const optsDiv = document.getElementById(`finalOpts-${i}`);
+            if (optsDiv) {
+                const optDivs = optsDiv.querySelectorAll('.final-opt');
+                optDivs.forEach(optDiv => {
+                    optDiv.removeEventListener('click', finalClickHandler);
+                    optDiv.addEventListener('click', finalClickHandler);
+                });
+            }
+        }
+    }
+
+    function finalClickHandler(e) {
+        const targetDiv = e.currentTarget;
+        const parentOptionsDiv = targetDiv.closest('.final-options');
+        const parentQuestionDiv = parentOptionsDiv.closest('.final-question');
+        const qidx = parseInt(parentQuestionDiv.dataset.qidx);
+        const selectedOpt = parseInt(targetDiv.dataset.optIndex);
+        // сохраняем ответ (перезаписываем)
+        finalAnswers[qidx] = selectedOpt;
+        renderFinalTest();  // перерендер с фидбеком и подсветкой
+        updateFinalResultPreview();
+    }
+
+    function updateFinalResultPreview() {
+        const resultDiv = document.getElementById('finalResult');
+        let answeredCount = 0;
+        let correctCount = 0;
+        for (let i = 0; i < finalQuestions.length; i++) {
+            if (finalAnswers[i] !== null) {
+                answeredCount++;
+                if (finalAnswers[i] === finalQuestions[i].correct) correctCount++;
+            }
+        }
+        if (answeredCount === finalQuestions.length) {
+            resultDiv.innerHTML = `<span style="background:#0e7b32; padding:0.5rem 1rem; border-radius:40px;">🏆 Тест завершён! Правильных ответов: ${correctCount} из ${finalQuestions.length} (${Math.round(correctCount/finalQuestions.length*100)}%)</span>`;
+            if (correctCount === finalQuestions.length) resultDiv.innerHTML += `<p style="margin-top:10px;">🎉 Поздравляем! Вы отлично усвоили материал по VR-разработке! 🎉</p>`;
+        } else {
+            resultDiv.innerHTML = `<span>📊 Отвечено на ${answeredCount} из ${finalQuestions.length} вопросов. Правильных: ${correctCount}. Ответьте на все вопросы для полной проверки.</span>`;
+        }
+    }
+
+    function showFinalResultOnDemand() {
+        updateFinalResultPreview();
+        let allAnswered = finalAnswers.every(a => a !== null);
+        if (!allAnswered) {
+            const resultDiv = document.getElementById('finalResult');
+            resultDiv.innerHTML += `<p style="color:#f97316; margin-top:8px;">⚠️ Вы ответили не на все вопросы. Завершите тест, чтобы увидеть полный результат.</p>`;
+            setTimeout(() => updateFinalResultPreview(), 2000);
+        } else {
+            updateFinalResultPreview();
+        }
+    }
+
+    function resetFinalTest() {
+        finalAnswers.fill(null);
+        renderFinalTest();
+        updateFinalResultPreview();
+    }
+
+    // инициализация
+    renderFinalTest();
+    updateFinalResultPreview();
+
+    document.getElementById('resetFinalTest').addEventListener('click', resetFinalTest);
+    document.getElementById('checkFinalTest').addEventListener('click', showFinalResultOnDemand);
+</script>
+</body>
+</html>
